@@ -36,7 +36,6 @@ const productSchema = new mongoose.Schema({
   },
   urls: {
     type: Array,
-    required: true,
   },
   productId: {
     type: String,
@@ -64,7 +63,7 @@ const productValidate = (body) => {
     color: Joi.string().required(),
     stars: Joi.number().required(),
     view: Joi.number().required(),
-    urls: Joi.array().required(),
+    urls: Joi.required(),
     productId: Joi.string().required(),
     size: Joi.string().required(),
     brand: Joi.string().required(),

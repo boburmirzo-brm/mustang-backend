@@ -3,6 +3,9 @@ const express = require("express");
 const router = express.Router();
 const { Product, productValidate } = require("../../models/productSchema");
 const auth = require("../../middleware/auth");
+const fs = require("fs");
+const cloudinary = require("../../cloudinary");
+const uploads = require("../../multer");
 
 // Method: GET
 // Desc:   Get all Products
@@ -31,8 +34,20 @@ router.get("/", async (req, res) => {
 
 // Method: POST
 // Desc:   Create a new product
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, uploads.array("image"), async (req, res) => {
   try {
+    const uploader = async (path) => await cloudinary.uploads(path, "photos");
+    let urls = [];
+    if (req.files) {
+      const files = req.files;
+      for (const file of files) {
+        const { path } = file;
+        const newPath = await uploader(path);
+        urls.push(newPath);
+        fs.unlinkSync(path);
+      }
+    }
+
     const { body } = req;
     const { error } = productValidate(body);
 
@@ -54,7 +69,6 @@ router.post("/", auth, async (req, res) => {
       color,
       stars,
       view,
-      urls,
       productId,
       size,
       brand,

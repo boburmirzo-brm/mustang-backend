@@ -1,3 +1,4 @@
+// @ts-nocheck
 require("dotenv/config")
 const cloudinary = require("cloudinary");
 cloudinary.v2.config({
