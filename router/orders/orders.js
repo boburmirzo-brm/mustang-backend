@@ -24,8 +24,8 @@ router.post("/", async(req, res)=>{
         if( error ){
             return res.json({msg: error.details[0].message, order: {}, state: false} )
         }
-        const { name, tel, address, orders } = req.body;
-        const newOrder = await Orders.create({ name, tel, address, orders })
+        const { name, tel, address, orders, message } = req.body;
+        const newOrder = await Orders.create({ name, tel, address, orders, message })
         
         const savedOrder = await newOrder.save()
         res.json({msg: "Successfully saved", order: savedOrder, state: true})

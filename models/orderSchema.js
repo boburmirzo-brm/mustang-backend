@@ -19,8 +19,7 @@ const orderSchema = new mongoose.Schema({
         min: 8
     },
     message: {
-        type: String,
-        required: true
+        type: String
     },
     orders: {
         type: Array,
@@ -33,9 +32,9 @@ const Orders = mongoose.model("order", orderSchema)
 const orderValidate = (body)=>{
     const schema = Joi.object({
         name: Joi.string().required().min(3),
-        tel: Joi.string().required().min(13).max(13),
+        tel: Joi.string().required().min(12).max(13),
         address: Joi.string().required().min(8),
-        message:Joi.string().required(), 
+        message: Joi.string(), 
         orders: Joi.array().required()
     })
     return schema.validate(body)
