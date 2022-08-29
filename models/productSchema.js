@@ -36,6 +36,7 @@ const productSchema = new mongoose.Schema({
   },
   urls: {
     type: Array,
+    required: true,
   },
   productId: {
     type: String,
@@ -55,9 +56,9 @@ const Product = mongoose.model("products", productSchema);
 
 const productValidate = (body) => {
   const schema = Joi.object({
-    title: Joi.string().required().min(3),
+    title: Joi.string().required().min(2),
     price: Joi.number().required(),
-    desc: Joi.string().required().min(3).max(2000),
+    desc: Joi.string().required().min(2).max(2000),
     season: Joi.string().required(),
     type: Joi.string().required(),
     color: Joi.string().required(),
