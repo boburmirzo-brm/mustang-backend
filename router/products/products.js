@@ -32,6 +32,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Method: Get
+// Desc:   Get one product by id
+router.get("/:id",async (req,res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product.length) {
+      return res.status(404).json({
+        state: false,
+        msg: "not found",
+        data: product,
+      });
+    }
+
+    res.status(200).json({
+      state: true,
+      msg: "successfully found",
+      data: product,
+    });
+  } catch (err) {
+    res.send(err);
+  }
+})
+
 // Method: POST
 // Desc:   Create a new product
 router.post("/", auth, uploads.array("image"), async (req, res) => {
