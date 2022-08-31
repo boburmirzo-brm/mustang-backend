@@ -17,7 +17,7 @@ router.post("/", [ auth, admin ], async(req, res)=>{
         if(user){
             return res.json({msg:"username is already been declared", user: {}, state: false } )
         }
-        const newUser = await Admin.create({username, password, name, owner:user.owner})
+        const newUser = await Admin.create({username, password, name, owner: false})
         const salt = await bcrypt.genSalt(10)
         newUser.password = await bcrypt.hash(newUser.password, salt)
         const savedUser = await newUser.save()
