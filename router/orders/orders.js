@@ -5,7 +5,8 @@ const auth = require("../../middleware/auth")
 
 router.get('/', async(req, res) => {
     try {
-        const orders = await Orders.find()
+        const skip = +req.query.skip
+        const orders = await Orders.find({}, undefined, {skip, limit: 8})
 
         if( !orders.length ) {
             return res.json({msg: 'Orders is empty.', orders: orders, state: false})

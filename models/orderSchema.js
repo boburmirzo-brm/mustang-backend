@@ -16,7 +16,7 @@ const orderSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true,
-        min: 8
+        min: 3
     },
     message: {
         type: String
@@ -33,7 +33,7 @@ const orderValidate = (body)=>{
     const schema = Joi.object({
         name: Joi.string().required().min(3),
         tel: Joi.string().required().min(12).max(13),
-        address: Joi.string().required().min(8),
+        address: Joi.string().required().min(3),
         message: Joi.string(), 
         orders: Joi.array().required()
     })
