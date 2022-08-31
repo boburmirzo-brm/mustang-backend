@@ -32,6 +32,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Method: Get
+// Desc:   Get one product by id
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        state: false,
+        msg: "not found",
+        data: product,
+      });
+    }
+
+    res.status(200).json({
+      state: true,
+      msg: "successfully found",
+      data: [product],
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 // Method: POST
 // Desc:   Create a new product
 router.post("/", auth, uploads.array("image"), async (req, res) => {
@@ -150,35 +174,8 @@ router.delete("/:id", auth, async (req, res) => {
 router.put("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
-    let {
-      title,
-      price,
-      desc,
-      season,
-      type,
-      color,
-      stars,
-      view,
-      urls,
-      productId,
-      size,
-      brand,
-    } = req.body;
 
-    const updatedProduct = await Products.findByIdAndUpdate(id, {
-      title,
-      price,
-      desc,
-      season,
-      type,
-      color,
-      stars,
-      view,
-      urls,
-      productId,
-      size,
-      brand,
-    });
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body);
 
     if (!updatedProduct) {
       return res.status(404).json({
