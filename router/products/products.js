@@ -223,7 +223,7 @@ router.put("/:id", auth, async (req, res) => {
 
 router.get('/search', async(req, res) => {
   try {
-      const products = await Foods.find()
+      const products = await Product.find()
 
       const filterProducts = products.filter(i=> i.title.toLocaleLowerCase().includes(req.query.title.toLocaleLowerCase()) )
 
