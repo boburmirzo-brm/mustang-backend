@@ -221,4 +221,22 @@ router.put("/:id", auth, async (req, res) => {
   }
 });
 
+router.get('/search', async(req, res) => {
+  try {
+      const products = await Foods.find()
+
+      const filterProducts = products.filter(i=> i.title.toLocaleLowerCase().includes(req.query.title.toLocaleLowerCase()) )
+
+      if( !filterProducts.length ) {
+          return res.json({msg: 'This product is not defined', data: filterProducts, state: false})
+      }
+
+      return res.json({msg: 'This product is defined', data: sortFoods, state: true})  
+  }
+
+  catch(err) {
+      res.json('err')
+  }
+})
+
 module.exports = router;
