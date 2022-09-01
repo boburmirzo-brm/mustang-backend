@@ -32,6 +32,32 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/page", async (req, res) => {
+  try {
+    let { pageSize, pageNumber, filter } = req.query
+    // const productsLength = await Product.countDocuments({})
+    // const btnCount = Math.ceil(productsLength / pageSize)
+    const {color, type, season, price: {from, to}} = JSON.parse(filter)
+
+    let filterType =  type === "barchasi" ? {} : {type}
+    let filterColor =  color === "barchasi" ? {} : {color}
+    let filterSeason =  season === "barchasi" ? {} : {season}
+    const productsSize = await Product
+      .find({...filterType, ...filterColor, ...filterSeason, price: {$gte: +from, $lte: +to} })
+      .countDocuments({})
+
+    const products = await Product
+        .find({...filterType, ...filterColor, ...filterSeason, price: {$gte: +from, $lte: +to} })
+        .sort({_id: -1})
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+    res.json({msg:"successfuly", data: { products, btnCount: Math.ceil(productsSize / pageSize) }, state: true})
+  } catch (e) {
+    res.json(`something went wrong: ${e}`);
+  }
+});
+
+
 // Method: Get
 // Desc:   Get one product by id
 router.get("/:id", async (req, res) => {
