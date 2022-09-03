@@ -16,6 +16,9 @@ app.get('/', async(req,res)=> {
     res.send('App is running perfectly!')
 })
 
+app.use("/", async(req, res)=>{
+    res.json("backend is warking successfully")
+})
 app.use("/sign-up", require("./router/login/sign-up"))
 app.use("/sign-in", require("./router/login/sign-in"))
 app.use("/products", require("./router/products/products"))
