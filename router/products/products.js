@@ -11,7 +11,7 @@ const uploads = require("../../multer");
 // Desc:   Get all Products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({_id: -1});
 
     // checking
     if (!products.length) {
