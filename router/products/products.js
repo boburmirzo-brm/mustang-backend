@@ -239,4 +239,23 @@ router.get('/search', async(req, res) => {
   }
 })
 
+router.patch("/view/:id", async(req, res)=>{
+  try{
+    const {id} = req.params
+    const updateProductOne = await Product.findById(id)
+    const updateProduct = await Product.updateOne(
+      {_id: id},
+      {
+        $set: {
+          view: updateProductOne.view + 1 
+        }
+      }
+    );
+    res.json({msg: 'This product is updated', data: updateProduct, state: true})
+  }
+  catch(err){
+    res.json(err)
+  }
+})
+
 module.exports = router;
