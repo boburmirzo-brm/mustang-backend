@@ -6,9 +6,11 @@ const auth = require("../../middleware/auth");
 const fs = require("fs");
 const cloudinary = require("../../cloudinary");
 const uploads = require("../../multer");
+const { log } = require("console");
 
 // Method: GET
 // Desc:   Get all Products
+
 router.get("/", async (req, res) => {
   try {
     const products = await Product.find().sort({_id: -1});
@@ -56,11 +58,26 @@ router.get("/page", async (req, res) => {
     res.json(`something went wrong: ${e}`);
   }
 });
+router.get('/search', async(req, res) => {
+  try {
+    const value = req.query.searchingValue.toLocaleLowerCase();
+    const products = await (await Product.find().select({title: 1, productId: 1, urls: 1})).filter(i=> i.title.toLocaleLowerCase().includes(value) || i.productId.toLocaleLowerCase().includes(value)).filter((_, inx) => inx <= 4)
+    
+    if( !products.length ) {
+        return res.json({msg: 'This product is not defined', data: products, state: false})
+    }
 
+    return res.json({msg: 'This product is defined', data: products, state: true})  
+  }
+
+  catch(err) {
+      res.json('err')
+  }
+})
 
 // Method: Get
 // Desc:   Get one product by id
-router.get("/one/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -221,22 +238,7 @@ router.put("/:id", auth, async (req, res) => {
   }
 });
 
-router.get('/search', async(req, res) => {
-  try {
-    const value = req.query.searchingValue.toLocaleLowerCase();
-      const products = await (await Product.find().select({title: 1, productId: 1, urls: 1})).filter(i=> i.title.toLocaleLowerCase().includes(value) || i.productId.toLocaleLowerCase().includes(value)).filter((_, inx) => inx <= 4)
 
-      if( !products.length ) {
-          return res.json({msg: 'This product is not defined', data: products, state: false})
-      }
-
-      return res.json({msg: 'This product is defined', data: products, state: true})  
-  }
-
-  catch(e) {
-      res.json(`something went wrong: ${e}`)
-  }
-})
 
 router.patch("/view/:id", async(req, res)=>{
   try{
