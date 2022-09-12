@@ -3,7 +3,7 @@ const router = express.Router()
 const {Orders, orderValidate } = require("../../models/orderSchema")
 const auth = require("../../middleware/auth")
 
-router.get('/', async(req, res) => {
+router.get('/', auth(), async(req, res) => {
     try {
         const skip = +req.query.skip
         const orders = await Orders.find({}, undefined, {skip, limit: 8})
@@ -32,11 +32,11 @@ router.post("/", async(req, res)=>{
         res.json({msg: "Successfully saved", order: savedOrder, state: true})
 })
 
-router.delete('/delete/:id', async(req, res) => {
+router.delete('/delete/:id', auth(), async(req, res) => {
     try {
         const deleteOrder = await Orders.findByIdAndRemove(req.params.id)
         res.json({
-            msg: 'Order was deleted',
+            msg: "Buyurtma o'chirildi",
             order: deleteOrder,
             state: true
         })
