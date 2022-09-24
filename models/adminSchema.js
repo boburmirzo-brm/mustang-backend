@@ -14,7 +14,7 @@ const adminSchema = new mongoose.Schema({
     }
 })
 
-const Admin = mongoose.model("admin", adminSchema)
+const Admin = mongoose.model("adminbrm", adminSchema)
 
 const adminValidate = (body)=>{
     const schema = Joi.object({
